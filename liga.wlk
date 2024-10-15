@@ -74,7 +74,7 @@ object zoe {
     cursos.add(liga.rol())
   }
 
-  method entrenar2(){
+  method entrenar2(liga){
     cursos.add(liga.rol())
   }
   method estudiosAvanzados() {
