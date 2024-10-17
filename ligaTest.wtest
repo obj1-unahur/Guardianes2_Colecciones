@@ -1,0 +1,29 @@
+import liga.*
+
+describe "Test sobre la liga" {
+
+    method initialize() {
+        liga.agregarCandidato(helia)
+        liga.agregarCandidato(astro)
+        liga.agregarCandidato(zoe)
+    }
+
+    test "Cambia el mímnimo del rol ayudante a 10 unidades, la liga entrena y luego une a candiadtos para el rol ayudante. Solo se convierte en guardianes helia y astro"{
+        ayudante.min(10)
+        liga.entrenar()
+        liga.unirse(ayudante)
+        assert.that(liga.guardianes().contains(helia))
+        assert.that(liga.guardianes().contains(astro))
+        assert.notThat(liga.guardianes().contains(zoe))
+    }
+
+    test "La liga cambia el rol destacado a estratega, entrena y luego une a los candidatos para el rol estretega, Solo se convierte en guardian zoe "{
+        liga.rol(estratega)
+        liga.entrenar()
+        liga.unirse(estratega)
+        assert.notThat(liga.guardianes().contains(helia))
+        assert.notThat(liga.guardianes().contains(astro))
+        assert.that(liga.guardianes().contains(zoe))
+    }
+
+}

@@ -2,7 +2,10 @@ object liga {
   const property candidatos=[]
   const property guardianes=[]
   var property rol = inicial
-
+  
+  method agregarCandidato(unCandidato) {
+    candidatos.add(unCandidato)
+  }
   method entrenar(){
     candidatos.forEach({candidato=> candidato.entrenar()})
   }
@@ -31,8 +34,8 @@ object liga {
 }
 
 object ayudante {
-  var property min = 100
-  var property max = 0
+  var property min = 0
+  var property max = 100
   method evaluar(candidato){
     return candidato.fuerza().between(min, max)
   }
@@ -80,5 +83,5 @@ object zoe {
   method estudiosAvanzados() {
     return cursos.contains(estratega)
   }
-  method fuerza() = 50 + cursos.size()
+  method fuerza() = 8 + cursos.size()
 }
