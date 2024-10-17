@@ -11,14 +11,14 @@ object liga {
     candidatos.forEach({candidato=> candidato.entrenar2(self)})
   }
 
-  method unirse() {
-    const superaronEvaluzacion = self.superanEvaluacion()
+  method unirse(rolDeseado) {
+    const superaronEvaluzacion = self.superanEvaluacion(rolDeseado)
     guardianes.addAll(superaronEvaluzacion)
     candidatos.removeAll(superaronEvaluzacion)
   }
 
-  method superanEvaluacion() = candidatos.filter({
-      candidato => rol.evaluar(candidato)
+  method superanEvaluacion(rolDeseado) = candidatos.filter({
+      candidato => rolDeseado.evaluar(candidato)
     })
 
   method fuerzaTotal() {
@@ -78,7 +78,7 @@ object zoe {
     cursos.add(liga.rol())
   }
   method estudiosAvanzados() {
-    return cursos.contains(liga.rol())
+    return cursos.contains(estratega)
   }
   method fuerza() = 50 + cursos.size()
 }
