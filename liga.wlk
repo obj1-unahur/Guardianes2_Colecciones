@@ -1,87 +1,65 @@
 object liga {
-  const property candidatos=[]
-  const property guardianes=[]
-  var property rol = inicial
-  
-  method agregarCandidato(unCandidato) {
-    candidatos.add(unCandidato)
-  }
-  method entrenar(){
-    candidatos.forEach({candidato=> candidato.entrenar()})
-  }
+   const candidatos = []
+   const guardianes = []
+   var property rolDestacado = inicial
 
-   method entrenar2(){
-    candidatos.forEach({candidato=> candidato.entrenar2(self)})
-  }
+   method agregarCandidato(c){
+    candidatos.add(c)
+   }
+   
+   method tieneGuardian(alguien) = guardianes.contains(alguien)
 
-  method unirse(rolDeseado) {
-    const superaronEvaluzacion = self.superanEvaluacion(rolDeseado)
-    guardianes.addAll(superaronEvaluzacion)
-    candidatos.removeAll(superaronEvaluzacion)
-  }
+   method candidatosQuePuedenSer(rol) = 
+      candidatos.filter{c=> rol.cumple(c)}
 
-  method superanEvaluacion(rolDeseado) = candidatos.filter({
-      candidato => rolDeseado.evaluar(candidato)
-    })
-
-  method fuerzaTotal() {
-    return guardianes.sum({ guardian => guardian.fuerza()})
-  }
-
-  method soportAtaque(unValor) {
-    return self.fuerzaTotal() > 2 * unValor
-  }
+   method hacerLaEvaluacion(rol) {
+    const nuevos = self.candidatosQuePuedenSer(rol)
+    guardianes.addAll(nuevos)
+    candidatos.removeAll(nuevos)
+   }
+   method entrenamiento(){
+    candidatos.forEach{c=>c.entrenar()}
+   }
+   method fuerzaTotal() = guardianes.sum{g=>g.fuerza()}
+   method superaAtaque(valor) = self.fuerzaTotal() > 2 * valor
 }
 
-object ayudante {
-  var property min = 0
-  var property max = 100
-  method evaluar(candidato){
-    return candidato.fuerza().between(min, max)
-  }
+object helia{
+    method fuerza() = 22
+    method estudiosAvanzados() = false
+    method entrenar(){
+        // no hace nada
+    }
 }
 
-object estratega {
-  method evaluar(candidato) {
-    return candidato.estudiosAvanzados()
-  }
-}
-object inicial {
-  method evaluar(candidato){
-    return true
-  }
+object astro{
+    var armas = 0
+    method fuerza() = armas * 10
+    method estudiosAvanzados() = armas > 5
+    method entrenar() {
+        armas = armas +1
+    }
 }
 
-object helia {
-  const property fuerza = 22
-  method estudiosAvanzados() = false
-  method entrenar() {}
-  method entrenar2(liga) {}
+object zoe{
+    const roles = #{}
+    method fuerza() = 8 + roles.size()
+    method estudiosAvanzados() = roles.contains(estratega)
+    method entrenar(){
+        roles.add(liga.rolDestacado())
+    }
 }
 
-object astro {
-  var armas = 0
-  method entrenar() {
-    armas += 1
-  }
-    method entrenar2(liga) {
-    armas += 1
-  }
-  method fuerza() = 10 * armas
-  method estudiosAvanzados() = armas > 5
+object ayudante{
+    var property minimo = 0
+    var property maximo = 100
+    method cumple(candidato) = candidato.fuerza().between(minimo, maximo) 
 }
 
-object zoe {
-  const property cursos = #{}
-  method entrenar(){
-    cursos.add(liga.rol())
-  }
+object inicial{
+    method cumple(candidato) = true
+}
 
-  method entrenar2(liga){
-    cursos.add(liga.rol())
-  }
-  method estudiosAvanzados() {
-    return cursos.contains(estratega)
-  }
-  method fuerza() = 8 + cursos.size()
+object estratega{
+    method cumple(candidato) = candidato.estudiosAvanzados()
 }
