@@ -1,29 +1,38 @@
 import liga.*
 
-describe "Test sobre la liga" {
+describe "grupo de tests" {
+  method initialize(){
+    liga.agregarCandidato(zoe)
+    liga.agregarCandidato(astro)
+    liga.agregarCandidato(helia)
+  }
 
-    method initialize() {
-        liga.agregarCandidato(helia)
-        liga.agregarCandidato(astro)
-        liga.agregarCandidato(zoe)
-    }
+  test "la liga no tiene guardianes" {
+    assert.notThat(liga.tieneGuardian(zoe))
+  }
 
-    test "Cambia el mímnimo del rol ayudante a 10 unidades, la liga entrena y luego une a candiadtos para el rol ayudante. Solo se convierte en guardianes helia y astro"{
-        ayudante.min(10)
-        liga.entrenar()
-        liga.unirse(ayudante)
-        assert.that(liga.guardianes().contains(helia))
-        assert.that(liga.guardianes().contains(astro))
-        assert.notThat(liga.guardianes().contains(zoe))
-    }
+  test "la liga evalua para rol ayudante y todos pasan a ser guardian" {
+    ayudante.minimo(10)
+    liga.entrenamiento()
+    liga.hacerLaEvaluacion(ayudante)
+    assert.that(liga.tieneGuardian(astro))
+    assert.that(liga.tieneGuardian(helia))
+    assert.notThat(liga.tieneGuardian(zoe))
+  }
 
-    test "La liga cambia el rol destacado a estratega, entrena y luego une a los candidatos para el rol estretega, Solo se convierte en guardian zoe "{
-        liga.rol(estratega)
-        liga.entrenar()
-        liga.unirse(estratega)
-        assert.notThat(liga.guardianes().contains(helia))
-        assert.notThat(liga.guardianes().contains(astro))
-        assert.that(liga.guardianes().contains(zoe))
-    }
+  test "la liga evalua para rol inicial y todos pasan a ser guardian" {
+    liga.hacerLaEvaluacion(inicial)
+    assert.that(liga.tieneGuardian(astro))
+    assert.that(liga.tieneGuardian(helia))
+    assert.that(liga.tieneGuardian(zoe))
+  }
+  test "la liga entrena y luego evalua para rol estratega y zoe pasa a ser guardian" {
+    liga.rolDestacado(estratega)
+    liga.entrenamiento()
+    liga.hacerLaEvaluacion(estratega)
+    assert.notThat(liga.tieneGuardian(astro))
+    assert.notThat(liga.tieneGuardian(helia))
+    assert.that(liga.tieneGuardian(zoe))
+  }
 
 }
